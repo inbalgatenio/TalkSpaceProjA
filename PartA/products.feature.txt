@@ -1,0 +1,113 @@
+Feature: E-Commerce Product Management
+
+# Precondition Steps:
+   The step to verify that the product name does not exist in the catalog has been added.
+#  Expected Results:
+The expected result of receiving a 200 response from the API has been added.
+Verification of the product being added with all its details (name, price, and category).
+ 
+Scenario: Add a book to catalog
+  Given The product name doesn't exist in the catalog
+  Given I login to the app with manager
+  Given I have a new product with details
+     | name       | price | category |
+     | TestBook   | 29.99 | Books    |
+  When I create the product through API
+  And I verify the product exists in database
+  And I check the product details via API
+  And I verify getting success response (200)
+  Then the product should be created successfully
+  Then the product added with the right details
+
+
+
+# Precondition Steps:
+   Verify that the product name does not already exist in the catalog. If it does, adding it will not be possible.
+   Ensure there is at least one book in the catalog, as the goal is to add another book.
+   Check the current number of books in the catalog to confirm there are no duplicates or overwrites after adding the new book.
+# Expected Results:
+   After adding the book, verify that the total number of books in the catalog has increased by exactly one.Scenario: Add another book to catalog
+
+Scenario: Add another book to catalog
+  Given The product name doesn't exist in the catalog
+  Given There are some products in the catalog
+  Given I check the number of books in the catalog
+  Given I login to the app with manager
+  When I add a new book to the catalog
+  And I verify the product exists
+  And I verify that the number of books has increased by one
+  Then the book should be available
+
+
+# Precondition Steps:
+   Determine the number of books to be added to the catalog.
+   Check the current number of books in the catalog.
+# Expected Results:
+   Verify that the books were added successfully.
+   Confirm that the products exist in the catalog with the correct details (name, price, and category).
+   Verify that the total number of books in the catalog has increased by exactly X (the number of books added).
+
+Scenario: Create multiple products
+  Given I have X books that I want to add
+  Given I check the number of books in the catalog
+  Given I login to the app with manager
+  When I try to create products
+  And I verify the products exist
+  And I check the products details
+  And I verify that the number of books has increased by X
+  Then the products should be processed
+  Then products should be created successfully
+
+
+
+# I will split the test into two separate tests.
+  This approach will make the tests easier to maintain, and if one step fails, it won't cause the entire test to fail.
+# Precondition Steps:
+   Verify that the book I want to update exists in the catalog.
+   Verify that the price, discount, and inventory details are different from the details that need to be updated.
+# Expected Results:
+  Verify that all the details (price, discount, inventory) have been updated successfully.
+  
+Scenario: Update product price and inventory
+  Given The product name exist in the catalog
+  Given product price is different from 49.99
+  Given product discount is different from 20 percent
+  Given product inventory is different from 100 percent
+  Given I login to the app with manager
+  Given I have a product in the system
+  When I update the product price
+  And I modify the product price to 49.99
+  And I set the product discount to 20 percent
+  And I update the product inventory to 100 units
+  Then the product should be updated successfully
+
+
+
+Scenario: Update product details
+  Given The product name exist in the catalog
+  Given product details are different from the values I want to update
+  Given I login to the app with manager
+  Given I have a product in the system
+  When I update the product description
+  And I change the product category to Electronics
+  And I modify the product weight to 2.5 kilograms
+  And I update the product color to black
+  And I change the product manufacturer details
+  And I modify multiple other product attributes
+  Then the product should be updated successfully
+
+ 
+# Expected Results:
+   Verify that the order continues to proceed.
+   Verify that the order status has been updated correctly.
+   Verify that the system logs the user out successfully.
+
+Scenario: Process order and logout
+  Given I login to the app with manager
+  Given I have an active order
+  When I process the order
+  And I verify order is still in process
+  And I verify order status was updated
+  And I logout from the system
+  Then the order was processed successfully.
+  Then the system is logged out.
